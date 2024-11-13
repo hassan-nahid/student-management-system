@@ -11,16 +11,11 @@ import { TfiWrite } from "react-icons/tfi";
 
 
 
-
-
-
-
 const Main = () => {
-
     const [user] = useAuthState(auth);
     const [signOut,] = useSignOut(auth);
 
-
+    const role = localStorage.getItem("role")
 
     const handleLogout = async () => {
         await signOut()
@@ -44,18 +39,26 @@ const Main = () => {
                         {/* Sidebar content here */}
                         <div>
                             <Link to={"/"} className="text-2xl font-bold text-primary"><img className="w-full py-2" src="/nexschola.png" alt="" /></Link>
-                            <li><Link to={"/add_subject"}>Add Subject<FaBook />
-                            </Link></li>
-                            <li><Link to={"/add_teacher"}>Add Teacher<GiTeacher />
-                            </Link></li> 
-                            <li><Link to={"/add_student"}>Add Student<PiStudentBold />
-                            </Link></li> 
-                            <li><Link to={"/all_student"}>All Student<FaPeopleRoof />
-                            </Link></li> 
-                            <li><Link to={"/all_teacher"}>All Teacher<IoIosPeople />
-                            </Link></li> 
-                            <li><Link to={"/notice"}>Notices<TfiWrite />
-                            </Link></li> 
+                            {role === import.meta.env.VITE_ADMIN && (<>
+                                <li><Link to={"/add_subject"}>Add Subject<FaBook />
+                                </Link></li>
+                                <li><Link to={"/add_teacher"}>Add Teacher<GiTeacher />
+                                </Link></li>
+                                <li><Link to={"/add_student"}>Add Student<PiStudentBold />
+                                </Link></li>
+                                <li><Link to={"/all_student"}>All Student<FaPeopleRoof />
+                                </Link></li>
+                                <li><Link to={"/all_teacher"}>All Teacher<IoIosPeople />
+                                </Link></li>
+                                <li><Link to={"/notice"}>Notices<TfiWrite />
+                                </Link></li>
+                            </>)}
+                            {role === import.meta.env.VITE_TEACHER && (<>
+                               teacher
+                            </>)}
+                            {role === import.meta.env.VITE_STUDENT && (<>
+                                student
+                            </>)}
 
                         </div>
                         <div className="flex gap-2 p-2 w-full">

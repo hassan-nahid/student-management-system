@@ -19,7 +19,7 @@ export const adminAuth = async (req, res) => {
     const token = jwt.sign({ email: process.env.ADMIN_EMAIL }, JWT_SECRET, { expiresIn: '7d' });
 
     // Send token and success message to the client
-    res.status(200).json({ token, role: 'admin', message: 'Admin authenticated successfully' });
+    res.status(200).json({ token, role: 'RFpxdfRxSqgoBt3Z0KJp6HQ6gHXwat8tRSG3UR16qks3ges9K3', message: 'Admin authenticated successfully' });
   } catch (error) {
     console.error("Authentication Error:", error);
     res.status(500).json({ message: 'Internal Server Error', error });
@@ -40,7 +40,7 @@ export const teacherAuth = async (req, res) => {
     const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '7d' });
 
     // Send token and success message to the client
-    res.status(200).json({ token, role: 'teacher', message: 'Teacher authenticated successfully' });
+    res.status(200).json({ token, role: 'Tz9LVDdijaNPxey25wBMa0jBkBUQRc3czy6pZaUm0q137b3gKK', message: 'Teacher authenticated successfully' });
   } catch (error) {
     console.error("Authentication Error:", error);
     res.status(500).json({ message: 'Internal Server Error', error });
@@ -61,9 +61,11 @@ export const studentAuth = async (req, res) => {
     const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '7d' });
 
     // Send token and success message to the client
-    res.status(200).json({ token, role: 'student', message: 'Student authenticated successfully' });
+    res.status(200).json({ token, role: 'BqiUqFAbus1UqHCeBA4wBcXWZZCVaojNfQIwODiWTRQmUlcyja', message: 'Student authenticated successfully' });
   } catch (error) {
     console.error("Authentication Error:", error);
     res.status(500).json({ message: 'Internal Server Error', error });
   }
 };
+
+

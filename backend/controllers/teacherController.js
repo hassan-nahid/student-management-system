@@ -1,23 +1,55 @@
 import Teacher from "../models/teacherModel.js";
 
-export const addTeacher = async (req, res) => {
-  const { name, email, phone, address } = req.body;
-  console.log(req.body);
-
+// Create a new teacher
+export const createTeacher = async (req, res) => {
   try {
-    // Create a new teacher instance
-    const newTeacher = new Teacher({
-      name,
-      email,
-      phone,
-      address,
-    });
-
-    // Save the new teacher to the database
-    await newTeacher.save();
-
-    return res.status(201).json({ message: "Teacher added successfully", teacher: newTeacher });
+    const teacher = new Teacher(req.body); // Directly pass the request body to create the teacher
+    await teacher.save();
+    res.status(201).json({ message: 'Teacher created successfully', teacher });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Get all teachers
+export const getAllTeachers = async (req, res) => {
+  try {
+    const teachers = await Teacher.find();
+    res.status(200).json(teachers);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get a single teacher by ID
+export const getTeacherById = async (req, res) => {
+  try {
+    const teacher = await Teacher.findById(req.params.id);
+    if (!teacher) return res.status(404).json({ message: 'Teacher not found' });
+    res.status(200).json(teacher);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Update a teacher by ID
+export const updateTeacher = async (req, res) => {
+  try {
+    const teacher = await Teacher.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!teacher) return res.status(404).json({ message: 'Teacher not found' });
+    res.status(200).json({ message: 'Teacher updated successfully', teacher });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Delete a teacher by ID
+export const deleteTeacher = async (req, res) => {
+  try {
+    const teacher = await Teacher.findByIdAndDelete(req.params.id);
+    if (!teacher) return res.status(404).json({ message: 'Teacher not found' });
+    res.status(200).json({ message: 'Teacher deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };

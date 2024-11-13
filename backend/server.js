@@ -6,6 +6,7 @@ import studentRoutes from "./routes/studentRoute.js";
 import subjectRoutes from "./routes/subjectRoute.js";
 import teacherRoutes from "./routes/teacherRoute.js";
 import authRoutes from "./routes/authRoute.js";
+import noticeRoutes from "./routes/noticeRoute.js";
 
 
 const app = express()
@@ -27,6 +28,7 @@ app.use('/api/students', studentRoutes);
 app.use("/api/subjects", subjectRoutes);
 app.use("/api/teachers", teacherRoutes);
 app.use("/api/auth",authRoutes);
+app.use("/api/notices",noticeRoutes);
 
 
 
