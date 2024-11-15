@@ -1,10 +1,13 @@
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import auth from "../firebase/firebase.config";
+import { useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import auth from "../../firebase/firebase.config";
 import { toast } from "react-toastify";
 import axios from "axios"; // Import Axios
+import useAuth from "../../hooks/useAuth";
 
 const AddStudent = () => {
-  const [createUserWithEmailAndPassword, , , error] = useCreateUserWithEmailAndPassword(auth);
+  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
+  const { user } = useAuth(); // Get the user from the useAuth hook
 
   const handleAddStudent = async (e) => {
     e.preventDefault();
@@ -22,8 +25,8 @@ const AddStudent = () => {
       postalCode: form.postalCode.value,
     };
     const courseEnrolled = form.courseEnrolled.value;
-    const className = form.class.value; // Get class value
-    const session = form.session.value; // Get session value
+    const className = form.class.value;
+    const session = form.session.value;
     const guardianDetails = {
       name: form.guardianName.value,
       relation: form.guardianRelation.value,
@@ -31,10 +34,14 @@ const AddStudent = () => {
     };
 
     try {
-      // Create the student in Firebase Authentication
+      const USER_HEADER = import.meta.env.VITE_HEADOFABC;
+      const USER_BODY = import.meta.env.VITE_HEADOFDEF; 
+
+      // Create the student in Firebase Authentication (without logging them in)
       const userCredential = await createUserWithEmailAndPassword(email, password);
-      
-      if (userCredential) {
+
+      // Ensure the admin is still logged in after creating the student
+      if (userCredential && userCredential.user) {
         // Define student data to send to MongoDB
         const studentData = {
           name,
@@ -44,36 +51,50 @@ const AddStudent = () => {
           gender,
           address,
           courseEnrolled,
-          class: className, // Include class in the student data
-          session, // Include session in the student data
+          class: className,
+          session,
           guardianDetails,
         };
-        
+
+        // Ensure a valid token is present for admin authentication
+        const token = localStorage.getItem("token");
+        if (!token) {
+          toast.error("Authentication token not found. Please login.");
+          return;
+        }
+
         // Send student data to the backend API using Axios
-        const response = await axios.post(`${import.meta.env.VITE_LINK}/api/students`, studentData);
+        const veriemail = encodeURIComponent(user.email);
+
+        const response = await axios.post(`${import.meta.env.VITE_LINK}/api/students?email=${veriemail}`, studentData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        });
 
         if (response.status === 201) {
           toast.success("Student added successfully.");
           form.reset();
+
+          // Reauthenticate the admin user to keep them logged in
+          await signInWithEmailAndPassword(USER_HEADER, USER_BODY);
+          
         }
       }
     } catch (error) {
-      // Handle errors
       if (error.response) {
         toast.error("Failed to add student data to the database.");
       } else {
-        toast.error(error.message);
+        toast.error(error.message || "An unexpected error occurred.");
       }
     }
   };
-
   return (
     <div className="flex items-center justify-center min-h-screen w-full">
       <div className="w-full max-w-lg p-8 space-y-6 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold text-center text-gray-800">Add New Student</h2>
 
         <form onSubmit={handleAddStudent} className="space-y-4">
-          {/* Other form fields remain unchanged */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Name</span>
@@ -182,20 +203,22 @@ const AddStudent = () => {
             <label className="label">
               <span className="label-text">Guardian&apos;s Relation</span>
             </label>
-            <input type="text" name="guardianRelation" placeholder="Enter relation" className="input input-bordered w-full" required />
+            <input type="text" name="guardianRelation" placeholder="Enter guardian's relation" className="input input-bordered w-full" required />
           </div>
 
           <div className="form-control">
             <label className="label">
               <span className="label-text">Guardian&apos;s Phone</span>
             </label>
-            <input type="text" name="guardianPhone" placeholder="Enter phone number" className="input input-bordered w-full" required />
+            <input type="text" name="guardianPhone" placeholder="Enter guardian's phone" className="input input-bordered w-full" required />
           </div>
 
-          <button type="submit" className="btn btn-primary text-white w-full mt-4">Add Student</button>
+          <div className="form-control">
+            <button type="submit" className="btn text-white btn-primary w-full">
+              Add Student
+            </button>
+          </div>
         </form>
-
-        {error && <p className="mt-4 text-center text-red-500">{error.message}</p>}
       </div>
     </div>
   );

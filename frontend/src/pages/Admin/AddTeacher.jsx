@@ -1,11 +1,14 @@
 import { toast } from "react-toastify";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import auth from "../firebase/firebase.config";
+import { useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import auth from "../../firebase/firebase.config";
+import useAuth from "../../hooks/useAuth";
 
 const AddTeacher = () => {
 
   const [createUserWithEmailAndPassword, , , error] = useCreateUserWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
 
+  const { user } = useAuth();
 
   const handleAddTeacher = async (e) => {
     e.preventDefault();
@@ -23,6 +26,8 @@ const AddTeacher = () => {
   
     try {
       // Create user with Firebase
+      const USER_HEADER = import.meta.env.VITE_HEADOFABC;
+      const USER_BODY = import.meta.env.VITE_HEADOFDEF;
       const userCredential = await createUserWithEmailAndPassword(email, password);
   
       if (userCredential) {
@@ -33,11 +38,12 @@ const AddTeacher = () => {
           phone,
           address,
         };
-  
-        const response = await fetch(`${import.meta.env.VITE_LINK}/api/teachers`, {
+        const veriemail = encodeURIComponent(user.email);
+        const response = await fetch(`${import.meta.env.VITE_LINK}/api/teachers?email=${veriemail}  `, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify(teacherData),
         });
@@ -45,6 +51,7 @@ const AddTeacher = () => {
         if (response.ok) {
           toast.success("Teacher added successfully.");
           form.reset();
+          await signInWithEmailAndPassword(USER_HEADER, USER_BODY);
         } else {
           toast.error("Failed to add teacher data to the database.");
         }

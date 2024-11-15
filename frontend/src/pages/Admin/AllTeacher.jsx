@@ -1,17 +1,28 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import auth from '../../firebase/firebase.config';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const AllTeacher = () => {
     const [teachers, setTeachers] = useState([]);
     const [filteredTeachers, setFilteredTeachers] = useState([]);
     const [searchName, setSearchName] = useState('');
     const [searchEmail, setSearchEmail] = useState('');
+    const [user] = useAuthState(auth);
+
 
     useEffect(() => {
         const fetchTeachers = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_LINK}/api/teachers`);
+                const email = encodeURIComponent(user.email); // Encode email for URL
+                const response = await fetch(`${import.meta.env.VITE_LINK}/api/teachers?email=${email}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
                 if (!response.ok) {
                     throw new Error('Failed to fetch teachers');
                 }
@@ -22,9 +33,10 @@ const AllTeacher = () => {
                 console.error(error.message);
             }
         };
-
+    
         fetchTeachers();
     }, []);
+    
 
     useEffect(() => {
         const filterTeachers = () => {
@@ -51,7 +63,12 @@ const AllTeacher = () => {
         if (confirmResult.isConfirmed) {
             try {
                 const response = await fetch(`${import.meta.env.VITE_LINK}/api/teachers/${teacherId}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({ email: user.email })
                 });
                 if (!response.ok) {
                     throw new Error('Failed to delete teacher');

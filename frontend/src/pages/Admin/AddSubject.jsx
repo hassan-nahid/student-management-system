@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { toast } from "react-toastify"; // Import Toastify
 import axios from "axios"; // Make sure to install axios if you haven't already
+import useAuth from "../../hooks/useAuth";
 
 const AddSubject = () => {
   const [subjectName, setSubjectName] = useState("");
   const [subjectCode, setSubjectCode] = useState("");
   const [subjectClass, setSubjectClass] = useState("");
   const [session, setSession] = useState("");
+  const { user } = useAuth(); // Get the user object from the useAuth hook
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +21,12 @@ const AddSubject = () => {
 
     try {
       // Send the new subject to the server
-      const response = await axios.post(`${import.meta.env.VITE_LINK}/api/subjects/add`, newSubject); // Adjust the URL as needed
+      // const veriemail = encodeURIComponent(user.email);
+      const response = await axios.post(`${import.meta.env.VITE_LINK}/api/subjects/add`,  { ...newSubject, email:user.email },{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }); // Adjust the URL as needed
       console.log("New Subject Added:", response.data);
 
       // Show success toast

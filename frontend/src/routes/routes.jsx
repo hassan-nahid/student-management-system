@@ -5,19 +5,22 @@ import Main from "../layouts/Main";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
-import AddSubject from "../pages/AddSubject";
-import AddTeacher from "../pages/AddTeacher";
-import AddStudent from "../pages/AddStudent";
-import AllStudent from "../pages/AllStudent";
-import AllTeacher from "../pages/AllTeacher";
-import Notice from "../pages/Notice";
-import StudentDetails from "../components/StudentDetails";
-import EditStudent from "../components/EditStudent";
+import AddSubject from "../pages/Admin/AddSubject";
+import AddTeacher from "../pages/Admin/AddTeacher";
+import AddStudent from "../pages/Admin/AddStudent";
+import AllStudent from "../pages/Admin/AllStudent";
+import AllTeacher from "../pages/Admin/AllTeacher";
+import Notice from "../pages/Admin/Notice";
+import StudentDetails from "../components/AdminExtraPage/StudentDetails";
+import EditStudent from "../components/AdminExtraPage/EditStudent";
 import PrivateRoute from "./PrivateRoute";
 import AdminPrivateRoute from "./AdminPrivateRoute";
 import ErrorPage from "../pages/ErrorPage";
-import TeacherDetails from "../components/TeacherDetails";
-import EditTeacher from "../components/EditTeacher";
+import TeacherDetails from "../components/AdminExtraPage/TeacherDetails";
+import EditTeacher from "../components/AdminExtraPage/EditTeacher";
+
+
+
 
 export const router = createBrowserRouter([
   {
@@ -52,12 +55,10 @@ export const router = createBrowserRouter([
       {
         path: "/student_details/:id",
         element: <AdminPrivateRoute><StudentDetails /></AdminPrivateRoute>,
-        loader: ({ params }) => fetch(`${import.meta.env.VITE_LINK}/api/students/${params.id}`),
       },
       {
         path: "/edit_student/:id",
         element: <AdminPrivateRoute><EditStudent /></AdminPrivateRoute>,
-        loader: ({ params }) => fetch(`${import.meta.env.VITE_LINK}/api/students/${params.id}`),
       },
       // teacher functionality
       {
@@ -71,12 +72,10 @@ export const router = createBrowserRouter([
       {
         path: "/teacher_details/:id",
         element: <AdminPrivateRoute><TeacherDetails /></AdminPrivateRoute>,
-        loader: ({ params }) => fetch(`${import.meta.env.VITE_LINK}/api/teachers/${params.id}`),
       },
       {
         path: "/edit_teacher/:id",
         element: <AdminPrivateRoute><EditTeacher /></AdminPrivateRoute>,
-        loader: ({ params }) => fetch(`${import.meta.env.VITE_LINK}/api/teachers/${params.id}`),
       },
       {
         path: "/notice",

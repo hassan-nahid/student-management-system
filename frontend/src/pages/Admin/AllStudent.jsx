@@ -1,17 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import useAuth from '../../hooks/useAuth';
 
 const AllStudent = () => {
     const [students, setStudents] = useState([]);
     const [filteredStudents, setFilteredStudents] = useState([]);
     const [searchName, setSearchName] = useState('');
     const [searchRoll, setSearchRoll] = useState('');
+    const {user} = useAuth();
 
     useEffect(() => {
         const fetchStudents = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_LINK}/api/students`);
+                const email = encodeURIComponent(user.email);
+                const response = await fetch(`${import.meta.env.VITE_LINK}/api/students?email=${email}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                );
                 if (!response.ok) {
                     throw new Error('Failed to fetch students');
                 }
@@ -28,7 +37,7 @@ const AllStudent = () => {
 
     useEffect(() => {
         const filterStudents = () => {
-            const filtered = students.filter((student) => 
+            const filtered = students.filter((student) =>
                 student.name.toLowerCase().includes(searchName.toLowerCase()) &&
                 student.roll.toString().includes(searchRoll)
             );
@@ -50,8 +59,12 @@ const AllStudent = () => {
 
         if (confirmResult.isConfirmed) {
             try {
-                const response = await fetch(`${import.meta.env.VITE_LINK}/api/students/${studentId}`, {
-                    method: 'DELETE'
+                const veriemail = encodeURIComponent(user.email);
+                const response = await fetch(`${import.meta.env.VITE_LINK}/api/students/${studentId}?email=${veriemail}`, {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
                 });
                 if (!response.ok) {
                     throw new Error('Failed to delete student');
@@ -87,7 +100,7 @@ const AllStudent = () => {
                     Total Student: {students?.length}
                 </div>
             </div>
-            
+
             {filteredStudents.length > 0 ? (
                 <div className="overflow-x-auto">
                     <table className="table">
@@ -127,8 +140,8 @@ const AllStudent = () => {
                                     <th className='flex flex-wrap gap-1'>
                                         <Link to={`/student_details/${student?._id}`} className="btn btn-primary btn-xs text-white">Details</Link>
                                         <Link to={`/edit_student/${student?._id}`} className="btn btn-warning btn-xs text-white">Edit</Link>
-                                        <button 
-                                            onClick={() => handleDelete(student._id)} 
+                                        <button
+                                            onClick={() => handleDelete(student._id)}
                                             className="btn btn-error btn-xs text-white"
                                         >
                                             Delete

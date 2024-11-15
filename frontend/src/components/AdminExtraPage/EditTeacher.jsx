@@ -1,9 +1,40 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import useAuth from "../../hooks/useAuth";
 
 const EditTeacher = () => {
-  const teacherData = useLoaderData(); // Fetch current teacher data
+  const [teacherData, setTeacherData] = useState(null);
   const navigate = useNavigate();
+  const { id } = useParams(); // Get the teacher ID from the URL parameters
+  const {user} = useAuth()
+
+  useEffect(() => {
+    // Fetch the teacher data when the component mounts
+    const fetchTeacherData = async () => {
+      try {
+        const email = encodeURIComponent(user.email);
+        const response = await fetch(`${import.meta.env.VITE_LINK}/api/teachers/${id}?email=${email}`, 
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setTeacherData(data);
+        } else {
+          toast.error("Failed to fetch teacher data.");
+        }
+      } catch (error) {
+        toast.error("An error occurred while fetching teacher data.");
+        console.log(error.message);
+      }
+    };
+
+    fetchTeacherData();
+  }, [id]);
 
   const handleEditTeacher = async (e) => {
     e.preventDefault();
@@ -28,10 +59,13 @@ const EditTeacher = () => {
       };
 
       // Send a PUT request to update teacher data
-      const response = await fetch(`${import.meta.env.VITE_LINK}/api/teachers/${teacherData._id}`, {
+      const Veriemail = encodeURIComponent(user.email);
+      const response = await fetch(`${import.meta.env.VITE_LINK}/api/teachers/${id}?email=${Veriemail}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+
         },
         body: JSON.stringify(updatedTeacherData),
       });
@@ -44,9 +78,13 @@ const EditTeacher = () => {
       }
     } catch (error) {
       toast.error("An error occurred while updating teacher details.");
-      console.log(error.message)
+      console.log(error.message);
     }
   };
+
+  if (!teacherData) {
+    return <div>Loading...</div>; // Show a loading state while fetching data
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen w-full">

@@ -1,22 +1,65 @@
-import { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import useAuth from "../../hooks/useAuth";
 
 const EditStudent = () => {
-  const studentData = useLoaderData();
+  const { id } = useParams(); // Get the student ID from the URL
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
-    name: studentData.name,
-    roll: studentData.roll,
-    email: studentData.email,
-    dateOfBirth: studentData.dateOfBirth.slice(0, 10), // Format to 'YYYY-MM-DD'
-    gender: studentData.gender,
-    courseEnrolled: studentData.courseEnrolled,
-    class: studentData.class,
-    session: studentData.session,
-    address: studentData.address,
-    guardianDetails: studentData.guardianDetails,
+    name: "",
+    roll: "",
+    email: "",
+    dateOfBirth: "",
+    gender: "",
+    courseEnrolled: "",
+    class: "",
+    session: "",
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      postalCode: "",
+    },
+    guardianDetails: {
+      name: "",
+      relation: "",
+      phone: "",
+    },
   });
+
+  useEffect(() => {
+    const fetchStudentData = async () => {
+      try {
+        const veriemail = encodeURIComponent(user.email);
+
+        const response = await axios.get(`${import.meta.env.VITE_LINK}/api/students/${id}?email=${veriemail}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          }
+        });
+        const studentData = response.data;
+        setFormData({
+          name: studentData.name,
+          roll: studentData.roll,
+          email: studentData.email,
+          dateOfBirth: studentData.dateOfBirth.slice(0, 10), // Format to 'YYYY-MM-DD'
+          gender: studentData.gender,
+          courseEnrolled: studentData.courseEnrolled,
+          class: studentData.class,
+          session: studentData.session,
+          address: studentData.address,
+          guardianDetails: studentData.guardianDetails,
+        });
+      } catch (error) {
+        console.log(error.message)
+        toast.error("Failed to fetch student data.");
+      }
+    };
+
+    fetchStudentData();
+  }, [id]);
 
   // Handle change for nested objects (address and guardianDetails)
   const handleNestedChange = (e, field) => {
@@ -41,13 +84,19 @@ const EditStudent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`${import.meta.env.VITE_LINK}/api/students/${studentData._id}`, formData);
+      const veriemail = encodeURIComponent(user.email);
+
+      const response = await axios.put(`${import.meta.env.VITE_LINK}/api/students/${id}?email=${veriemail}`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }
+      });
       if (response.status === 200) {
         toast.success("Student updated successfully!");
       }
     } catch (error) {
       toast.error(error.message);
-      console.log(error.message)
+      console.log(error.message);
     }
   };
 
@@ -55,7 +104,7 @@ const EditStudent = () => {
     <div className="flex items-center justify-center min-h-screen w-full">
       <div className="w-full max-w-lg p-8 space-y-6 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold text-center text-gray-800">Edit Student</h2>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="form-control">
             <label className="label">
@@ -158,7 +207,13 @@ const EditStudent = () => {
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
-              {/* Add other classes as options */}
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
             </select>
           </div>
 
@@ -173,9 +228,10 @@ const EditStudent = () => {
               className="input input-bordered w-full"
               required
             >
-              <option value="2022-2023">2022-2023</option>
+              <option value="2024-2025">2024-2025</option>
               <option value="2023-2024">2023-2024</option>
-              {/* Add other sessions as options */}
+              <option value="2022-2023">2022-2023</option>
+              <option value="2021-2022">2021-2022</option>
             </select>
           </div>
 
