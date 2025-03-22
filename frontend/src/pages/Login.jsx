@@ -44,7 +44,7 @@ const Login = () => {
                     signInWithEmailAndPassword(email, password)
                         .then(() => {
                             Swal.fire({
-                                position: "top-center",
+                                position: "center",
                                 icon: "success",
                                 title: `${role} Login Successful`,
                                 showConfirmButton: false,

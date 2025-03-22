@@ -19,17 +19,17 @@ const Notice = () => {
           setNotices(data);
           setFilteredNotices(data); // Initialize filteredNotices with all notices
         } else {
-          toast.error("Failed to fetch notices.");
+          const errorData = await response.json();
+          toast.error(errorData.message || "Failed to fetch notices.");
         }
       } catch (error) {
-        console.log(error.message);
+        console.error("Fetch Notices Error:", error.message);
         toast.error("An error occurred while fetching notices.");
       }
     };
     fetchNotices();
-  }, []);
+  }, []); // Empty dependency array ensures it runs only once
 
-  // Handle form submission to create a new notice
   const handleAddNotice = async (e) => {
     e.preventDefault();
     const newNotice = {
@@ -48,22 +48,29 @@ const Notice = () => {
       });
 
       if (response.ok) {
+        const createdNotice = await response.json(); // Get the notice with _id from server
         toast.success("Notice posted successfully.");
         setTitle("");
         setContent("");
-        setNotices([...notices, newNotice]);
-        setFilteredNotices([...filteredNotices, newNotice]);
+        setNotices((prevNotices) => [...prevNotices, createdNotice]);
+        setFilteredNotices((prevFiltered) => [...prevFiltered, createdNotice]);
       } else {
-        toast.error("Failed to post notice.");
+        const errorData = await response.json();
+        toast.error(errorData.message || "Failed to post notice.");
       }
     } catch (error) {
-      console.log(error.message);
+      console.error("Add Notice Error:", error.message);
       toast.error("An error occurred while posting the notice.");
     }
   };
 
   // Handle notice deletion with confirmation
   const handleDeleteNotice = async (id) => {
+    if (!id) {
+      toast.error("Invalid notice ID.");
+      return;
+    }
+
     const confirmResult = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -81,14 +88,15 @@ const Notice = () => {
         });
 
         if (response.ok) {
-          setNotices(notices.filter((notice) => notice._id !== id));
-          setFilteredNotices(filteredNotices.filter((notice) => notice._id !== id));
+          setNotices((prevNotices) => prevNotices.filter((notice) => notice._id !== id));
+          setFilteredNotices((prevFiltered) => prevFiltered.filter((notice) => notice._id !== id));
           Swal.fire("Deleted!", "Notice has been deleted.", "success");
         } else {
-          toast.error("Failed to delete notice.");
+          const errorData = await response.json();
+          toast.error(errorData.message || "Failed to delete notice.");
         }
       } catch (error) {
-        console.log(error.message);
+        console.error("Delete Notice Error:", error.message);
         toast.error("An error occurred while deleting the notice.");
       }
     }
@@ -117,6 +125,7 @@ const Notice = () => {
             onChange={(e) => setTitle(e.target.value)}
             className="input input-bordered w-full"
             required
+            placeholder="Enter notice title"
           />
         </div>
 
@@ -129,10 +138,13 @@ const Notice = () => {
             onChange={(e) => setContent(e.target.value)}
             className="textarea textarea-bordered w-full"
             required
+            placeholder="Enter notice content"
           />
         </div>
 
-        <button type="submit" className="btn text-white btn-primary w-full">Post Notice</button>
+        <button type="submit" className="btn text-white btn-primary w-full">
+          Post Notice
+        </button>
       </form>
 
       <div className="my-4">
@@ -149,7 +161,10 @@ const Notice = () => {
       <ul className="space-y-4">
         {filteredNotices.length > 0 ? (
           filteredNotices.map((notice) => (
-            <li key={notice._id} className="p-4 bg-white rounded-lg shadow-md flex justify-between items-start">
+            <li
+              key={notice._id} // Ensure unique key using _id
+              className="p-4 bg-white rounded-lg shadow-md flex justify-between items-start"
+            >
               <div>
                 <h3 className="text-xl font-semibold">{notice.title}</h3>
                 <p className="text-gray-600">{notice.content}</p>
@@ -158,7 +173,7 @@ const Notice = () => {
                 </p>
               </div>
               <button
-                onClick={() => handleDeleteNotice(notice._id)}
+                onClick={() => handleDeleteNotice(notice._id)} // Pass valid _id
                 className="btn btn-sm btn-error text-white ml-4"
               >
                 Delete

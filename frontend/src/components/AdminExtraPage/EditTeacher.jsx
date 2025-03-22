@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
+import Loading from "../Loading";
 
 const EditTeacher = () => {
   const [teacherData, setTeacherData] = useState(null);
@@ -83,7 +84,7 @@ const EditTeacher = () => {
   };
 
   if (!teacherData) {
-    return <div>Loading...</div>; // Show a loading state while fetching data
+    return <Loading/>; // Show a loading state while fetching data
   }
 
   return (

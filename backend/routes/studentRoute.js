@@ -1,6 +1,7 @@
-import { createStudent, deleteStudent, getAllStudents, getStudentById, updateStudent } from "../controllers/studentController.js";
+import { createStudent, deleteStudent, getAllStudents, getStudentByClass, getStudentById, updateStudent } from "../controllers/studentController.js";
 import express from 'express';
 import { verifyAdmin } from "../middleware/AdminVerify.js";
+import { verifyTeacher } from "../middleware/TeacherVerify.js";
 
 const router = express.Router();
 
@@ -18,5 +19,8 @@ router.put('/:id', verifyAdmin, updateStudent);
 
 // Route to delete a student by ID
 router.delete('/:id', verifyAdmin, deleteStudent);
+
+// Route to get students by class
+router.get('/class/:class', verifyTeacher, getStudentByClass);
 
 export default router;

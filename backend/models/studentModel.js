@@ -66,11 +66,11 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    class: {  // Added class field
+    class: {  
         type: String,
         required: true,
     },
-    session: {  // Added session field
+    session: { 
         type: String,
         required: true,
     },

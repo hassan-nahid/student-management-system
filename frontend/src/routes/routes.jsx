@@ -5,7 +5,6 @@ import Main from "../layouts/Main";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
-import AddSubject from "../pages/Admin/AddSubject";
 import AddTeacher from "../pages/Admin/AddTeacher";
 import AddStudent from "../pages/Admin/AddStudent";
 import AllStudent from "../pages/Admin/AllStudent";
@@ -18,6 +17,10 @@ import AdminPrivateRoute from "./AdminPrivateRoute";
 import ErrorPage from "../pages/ErrorPage";
 import TeacherDetails from "../components/AdminExtraPage/TeacherDetails";
 import EditTeacher from "../components/AdminExtraPage/EditTeacher";
+import Schedule from "../pages/Admin/Schedule";
+import EditSchedule from "../components/AdminExtraPage/EditSchedule";
+import Attendance from "../pages/Teacher/Attendance";
+import TeacherPrivateRoute from "./TeacherPrivateRoute";
 
 
 
@@ -39,11 +42,7 @@ export const router = createBrowserRouter([
 
       // Admin routes
 
-      {
-        path: "/add_subject",
-        element: <AdminPrivateRoute><AddSubject /></AdminPrivateRoute>,
-      },
-      // student functionality
+     
       {
         path: "/add_student",
         element: <AdminPrivateRoute><AddStudent /></AdminPrivateRoute>,
@@ -81,10 +80,21 @@ export const router = createBrowserRouter([
         path: "/notice",
         element: <AdminPrivateRoute><Notice /></AdminPrivateRoute>,
       },
+      {
+        path: "/schedule",
+        element: <AdminPrivateRoute><Schedule /></AdminPrivateRoute>,
+      },
+      {
+        path: "/schedule/:id",
+        element: <AdminPrivateRoute><EditSchedule /></AdminPrivateRoute>,
+      },
 
 
       // Teacher routes
-
+      {
+        path: "/attendance",
+        element: <TeacherPrivateRoute><Attendance /></TeacherPrivateRoute>,
+      },
 
     ]
   },

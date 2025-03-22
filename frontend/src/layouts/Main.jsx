@@ -40,8 +40,6 @@ const Main = () => {
                         <div>
                             <Link to={"/"} className="text-2xl font-bold text-primary"><img className="w-full py-2" src="/nexschola.png" alt="" /></Link>
                             {role === import.meta.env.VITE_ADMIN && (<>
-                                <li><Link to={"/add_subject"}>Add Subject<FaBook />
-                                </Link></li>
                                 <li><Link to={"/add_teacher"}>Add Teacher<GiTeacher />
                                 </Link></li>
                                 <li><Link to={"/add_student"}>Add Student<PiStudentBold />
@@ -50,11 +48,14 @@ const Main = () => {
                                 </Link></li>
                                 <li><Link to={"/all_teacher"}>All Teacher<IoIosPeople />
                                 </Link></li>
+                                <li><Link to={"/schedule"}>Schedule<FaBook />
+                                </Link></li>
                                 <li><Link to={"/notice"}>Notices<TfiWrite />
                                 </Link></li>
                             </>)}
                             {role === import.meta.env.VITE_TEACHER && (<>
-                               teacher
+                                <li><Link to={"/attendance"}>Attendance<TfiWrite />
+                                </Link></li>
                             </>)}
                             {role === import.meta.env.VITE_STUDENT && (<>
                                 student

@@ -3,7 +3,6 @@ import Student from "../models/studentModel.js";
 // Create a new student
 export const createStudent = async (req, res) => {
   try {
-    console.log()
     const student = new Student(req.body);
     await student.save();
     res.status(201).json({ message: 'Student created successfully', student });
@@ -54,3 +53,13 @@ export const deleteStudent = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getStudentByClass = async (req, res) => {
+  try{
+    const students = await Student.find({ class: req.params.class });
+    if (!students) return res.status(404).json({ message: 'Students not found' });
+    res.status(200).json(students);
+  }catch(error){
+    res.status(500).json({ error: error.message });
+  }
+}

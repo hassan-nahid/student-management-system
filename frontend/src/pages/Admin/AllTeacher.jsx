@@ -35,7 +35,7 @@ const AllTeacher = () => {
         };
     
         fetchTeachers();
-    }, []);
+    }, [user]);
     
 
     useEffect(() => {

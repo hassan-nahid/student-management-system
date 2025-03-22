@@ -90,8 +90,8 @@ const AddStudent = () => {
     }
   };
   return (
-    <div className="flex items-center justify-center min-h-screen w-full">
-      <div className="w-full max-w-lg p-8 space-y-6 bg-white shadow-lg rounded-lg">
+    <div className="flex items-center justify-center w-full">
+      <div className="w-full p-8 space-y-6 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold text-center text-gray-800">Add New Student</h2>
 
         <form onSubmit={handleAddStudent} className="space-y-4">
