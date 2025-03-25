@@ -9,6 +9,7 @@ import authRoutes from "./routes/authRoute.js";
 import noticeRoutes from "./routes/noticeRoute.js";
 import scheduleRoutes from "./routes/scheduleRoute.js";
 import attendanceRoutes from "./routes/attendanceRoute.js";
+import marksRoutes from "./routes/marksRoute.js";
 
 
 const app = express()
@@ -33,6 +34,7 @@ app.use("/api/auth",authRoutes);
 app.use("/api/notices",noticeRoutes);
 app.use('/api/schedule', scheduleRoutes);
 app.use("/api/attendance", attendanceRoutes);
+app.use("/api/marks", marksRoutes);
 
 
 

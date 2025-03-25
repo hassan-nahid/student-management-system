@@ -8,6 +8,8 @@ import { PiStudentBold } from "react-icons/pi";
 import { FaPeopleRoof } from "react-icons/fa6";
 import { IoIosPeople } from "react-icons/io";
 import { TfiWrite } from "react-icons/tfi";
+import { IoCheckmarkDoneSharp } from "react-icons/io5";
+
 
 
 
@@ -48,6 +50,8 @@ const Main = () => {
                                 </Link></li>
                                 <li><Link to={"/all_teacher"}>All Teacher<IoIosPeople />
                                 </Link></li>
+                                <li><Link to={"/add_subject"}>Add Subject<FaBook />
+                                </Link></li>
                                 <li><Link to={"/schedule"}>Schedule<FaBook />
                                 </Link></li>
                                 <li><Link to={"/notice"}>Notices<TfiWrite />
@@ -56,6 +60,7 @@ const Main = () => {
                             {role === import.meta.env.VITE_TEACHER && (<>
                                 <li><Link to={"/attendance"}>Attendance<TfiWrite />
                                 </Link></li>
+                                <li><Link to={"/marks_entry"}>Marks Entry<IoCheckmarkDoneSharp/> </Link></li>
                             </>)}
                             {role === import.meta.env.VITE_STUDENT && (<>
                                 student

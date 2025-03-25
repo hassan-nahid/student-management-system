@@ -21,6 +21,8 @@ import Schedule from "../pages/Admin/Schedule";
 import EditSchedule from "../components/AdminExtraPage/EditSchedule";
 import Attendance from "../pages/Teacher/Attendance";
 import TeacherPrivateRoute from "./TeacherPrivateRoute";
+import MarksEntry from "../pages/Teacher/MarksEntry";
+import AddSubject from "../pages/Admin/AddSubject";
 
 
 
@@ -42,7 +44,7 @@ export const router = createBrowserRouter([
 
       // Admin routes
 
-     
+
       {
         path: "/add_student",
         element: <AdminPrivateRoute><AddStudent /></AdminPrivateRoute>,
@@ -77,6 +79,10 @@ export const router = createBrowserRouter([
         element: <AdminPrivateRoute><EditTeacher /></AdminPrivateRoute>,
       },
       {
+        path: "/add_subject",
+        element: <AdminPrivateRoute><AddSubject /></AdminPrivateRoute>,
+      },
+      {
         path: "/notice",
         element: <AdminPrivateRoute><Notice /></AdminPrivateRoute>,
       },
@@ -94,6 +100,10 @@ export const router = createBrowserRouter([
       {
         path: "/attendance",
         element: <TeacherPrivateRoute><Attendance /></TeacherPrivateRoute>,
+      },
+      {
+        path: "/marks_entry",
+        element: <TeacherPrivateRoute><MarksEntry /></TeacherPrivateRoute>,
       },
 
     ]

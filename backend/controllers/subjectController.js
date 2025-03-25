@@ -12,3 +12,12 @@ export const addSubject = async (req, res) => {
   }
 };
 
+export const getSubjectsByClass = async (req, res) => {
+  try {
+    const { class: subjectClass } = req.params;
+    const subjects = await Subject.find({ class: subjectClass });
+    res.status(200).json(subjects);
+  } catch (error) {
+    res.status(400).json({ message: "Error fetching subjects", error });
+  }
+};
