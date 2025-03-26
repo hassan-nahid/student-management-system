@@ -85,11 +85,15 @@ const AttendanceSystem = () => {
         try {
           const token = localStorage.getItem("token");
 
-          // Preparing attendance data in array format with roll number
-          const attendanceData = Object.keys(attendance).map((roll) => ({
-            roll: roll,
-            status: attendance[roll],
-          }));
+          // Preparing attendance data in array format with roll number and student name
+          const attendanceData = Object.keys(attendance).map((roll) => {
+            const student = students.find((s) => s.roll === roll); // Get student details
+            return {
+              roll: roll,
+              name: student ? student.name : "Unknown", // Add student name
+              status: attendance[roll],
+            };
+          });
 
           const requestData = {
             class: selectedClass,
@@ -124,7 +128,7 @@ const AttendanceSystem = () => {
   const sortedStudents = filteredStudents.sort((a, b) => a.roll - b.roll);
 
   return (
-    <div className="container mx-auto p-6 bg-white rounded-xl shadow-lg">
+    <div className="container mx-auto p-6 bg-white rounded-xl shadow-lg h-full">
       <h1 className="text-3xl font-semibold mb-6 text-center text-blue-700">Attendance System</h1>
 
       {/* Class Selection */}

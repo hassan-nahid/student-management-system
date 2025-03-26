@@ -23,6 +23,8 @@ import Attendance from "../pages/Teacher/Attendance";
 import TeacherPrivateRoute from "./TeacherPrivateRoute";
 import MarksEntry from "../pages/Teacher/MarksEntry";
 import AddSubject from "../pages/Admin/AddSubject";
+import AttendanceOverview from "../pages/Teacher/AttendanceOverview";
+import MarksOverview from "../pages/Teacher/MarksOverview";
 
 
 
@@ -104,6 +106,14 @@ export const router = createBrowserRouter([
       {
         path: "/marks_entry",
         element: <TeacherPrivateRoute><MarksEntry /></TeacherPrivateRoute>,
+      },
+      {
+        path: "/attendance_overview",
+        element: <TeacherPrivateRoute><AttendanceOverview /></TeacherPrivateRoute>,
+      },
+      {
+        path: "/marks_overview",
+        element: <TeacherPrivateRoute><MarksOverview /></TeacherPrivateRoute>,
       },
 
     ]

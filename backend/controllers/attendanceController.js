@@ -38,6 +38,7 @@ export const submitAttendance = async (req, res) => {
     // Map the attendance to the student roll numbers
     const attendanceData = attendance.map((entry) => ({
       roll: entry.roll,
+      name: entry.name,
       status: entry.status,
     }));
 
@@ -59,6 +60,37 @@ export const submitAttendance = async (req, res) => {
     console.error('Error submitting attendance:', error);
     res.status(500).json({
       message: 'Failed to submit attendance.',
+    });
+  }
+};
+
+export const getAttendanceByClass = async (req, res) => {
+  const { class: selectedClass } = req.params;
+
+  if (!selectedClass) {
+    return res.status(400).json({
+      message: 'Class parameter is required.',
+    });
+  }
+
+  try {
+    // Find attendance records for the given class
+    const attendanceRecords = await Attendance.find({ class: selectedClass });
+
+    if (!attendanceRecords || attendanceRecords.length === 0) {
+      return res.status(404).json({
+        message: 'No attendance records found for this class.',
+      });
+    }
+
+    res.status(200).json({
+      message: 'Attendance records retrieved successfully.',
+      data: attendanceRecords,
+    });
+  } catch (error) {
+    console.error('Error retrieving attendance:', error);
+    res.status(500).json({
+      message: 'Failed to retrieve attendance records.',
     });
   }
 };

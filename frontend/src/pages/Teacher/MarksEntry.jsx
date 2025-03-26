@@ -49,6 +49,7 @@ const MarksEntry = () => {
         const response = await axios.get(
           `${import.meta.env.VITE_LINK}/api/subjects/class/${selectedClass}`,
           {
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -136,7 +137,7 @@ const MarksEntry = () => {
   const sortedStudents = filteredStudents.sort((a, b) => a.roll - b.roll);
 
   return (
-    <div className="container mx-auto p-6 bg-white rounded-xl shadow-lg">
+    <div className="container mx-auto p-6 bg-white rounded-xl h-full shadow-lg">
       <h1 className="text-3xl font-semibold mb-6 text-center text-blue-700">Marks Entry System</h1>
 
       {/* Class Selection */}

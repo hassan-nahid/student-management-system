@@ -9,6 +9,9 @@ import { FaPeopleRoof } from "react-icons/fa6";
 import { IoIosPeople } from "react-icons/io";
 import { TfiWrite } from "react-icons/tfi";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
+import { TbBookmarksFilled } from "react-icons/tb";
+
+
 
 
 
@@ -61,6 +64,8 @@ const Main = () => {
                                 <li><Link to={"/attendance"}>Attendance<TfiWrite />
                                 </Link></li>
                                 <li><Link to={"/marks_entry"}>Marks Entry<IoCheckmarkDoneSharp/> </Link></li>
+                                <li><Link to={"/attendance_overview"}>Attendance Overview<FaPeopleRoof/> </Link></li>
+                                <li><Link to={"/marks_overview"}>Marks Overview<TbBookmarksFilled/> </Link></li>
                             </>)}
                             {role === import.meta.env.VITE_STUDENT && (<>
                                 student
