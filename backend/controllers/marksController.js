@@ -1,10 +1,10 @@
 import Marks from "../models/marksModel.js";
- 
+
 
 // Submit marks
 export const submitMarks = async (req, res) => {
   try {
-    const { class: className, examName, subject, marks, teacherEmail } = req.body;
+    const { class: className, examName, subject, marks, teacherEmail, maxMark } = req.body;
 
     if (!className || !examName || !subject || !marks.length || !teacherEmail) {
       return res.status(400).json({ error: "All fields are required" });
@@ -16,6 +16,7 @@ export const submitMarks = async (req, res) => {
       subject,
       marks,
       teacherEmail,
+      maxMark, 
     });
 
     await newMarksEntry.save();

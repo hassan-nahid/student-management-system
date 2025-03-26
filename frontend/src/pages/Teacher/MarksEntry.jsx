@@ -84,17 +84,17 @@ const MarksEntry = () => {
       Swal.fire("Error", "Teacher email is missing. Please log in again.", "error");
       return;
     }
-
+  
     if (!examName.trim()) {
       Swal.fire("Error", "Please enter the exam name.", "error");
       return;
     }
-
+  
     if (!selectedSubject) {
       Swal.fire("Error", "Please select a subject.", "error");
       return;
     }
-
+  
     Swal.fire({
       title: "Confirm Submission",
       text: "Are you sure you want to submit the marks?",
@@ -109,22 +109,23 @@ const MarksEntry = () => {
             roll: roll,
             mark: marks[roll],
           }));
-
+  
           const requestData = {
             class: selectedClass,
             subject: selectedSubject,
             examName: examName,
             marks: marksData,
             teacherEmail: user.email,
+            maxMark: maxMark,  // Include maxMark in the request data
           };
-
+  
           await axios.post(`${import.meta.env.VITE_LINK}/api/marks`, requestData, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
           });
-
+  
           Swal.fire("Success", "Marks submitted successfully!", "success");
         } catch (error) {
           console.error("Error submitting marks:", error);
@@ -133,6 +134,7 @@ const MarksEntry = () => {
       }
     });
   };
+  
 
   const sortedStudents = filteredStudents.sort((a, b) => a.roll - b.roll);
 

@@ -24,6 +24,10 @@ const MarksSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    maxMark: {
+      type: Number,
+      required: true,
+    }
   },
   { timestamps: true }
 );

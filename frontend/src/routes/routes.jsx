@@ -25,6 +25,7 @@ import MarksEntry from "../pages/Teacher/MarksEntry";
 import AddSubject from "../pages/Admin/AddSubject";
 import AttendanceOverview from "../pages/Teacher/AttendanceOverview";
 import MarksOverview from "../pages/Teacher/MarksOverview";
+import TeacherNotice from "../pages/Teacher/teacherNotice";
 
 
 
@@ -85,7 +86,7 @@ export const router = createBrowserRouter([
         element: <AdminPrivateRoute><AddSubject /></AdminPrivateRoute>,
       },
       {
-        path: "/notice",
+        path: "/admin_notice",
         element: <AdminPrivateRoute><Notice /></AdminPrivateRoute>,
       },
       {
@@ -114,6 +115,10 @@ export const router = createBrowserRouter([
       {
         path: "/marks_overview",
         element: <TeacherPrivateRoute><MarksOverview /></TeacherPrivateRoute>,
+      },
+      {
+        path: "/teacher_notice",
+        element: <TeacherPrivateRoute><TeacherNotice /></TeacherPrivateRoute>,
       },
 
     ]

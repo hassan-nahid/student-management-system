@@ -16,6 +16,7 @@ import { TbBookmarksFilled } from "react-icons/tb";
 
 
 
+
 const Main = () => {
     const [user] = useAuthState(auth);
     const [signOut,] = useSignOut(auth);
@@ -57,7 +58,7 @@ const Main = () => {
                                 </Link></li>
                                 <li><Link to={"/schedule"}>Schedule<FaBook />
                                 </Link></li>
-                                <li><Link to={"/notice"}>Notices<TfiWrite />
+                                <li><Link to={"/admin_notice"}>Notices<TfiWrite />
                                 </Link></li>
                             </>)}
                             {role === import.meta.env.VITE_TEACHER && (<>
@@ -66,6 +67,7 @@ const Main = () => {
                                 <li><Link to={"/marks_entry"}>Marks Entry<IoCheckmarkDoneSharp/> </Link></li>
                                 <li><Link to={"/attendance_overview"}>Attendance Overview<FaPeopleRoof/> </Link></li>
                                 <li><Link to={"/marks_overview"}>Marks Overview<TbBookmarksFilled/> </Link></li>
+                                <li><Link to={"/teacher_notice"}>Teacher Notice<TfiWrite/> </Link></li>
                             </>)}
                             {role === import.meta.env.VITE_STUDENT && (<>
                                 student
