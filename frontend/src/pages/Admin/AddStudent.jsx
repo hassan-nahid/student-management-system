@@ -3,6 +3,8 @@ import auth from "../../firebase/firebase.config";
 import { toast } from "react-toastify";
 import axios from "axios"; // Import Axios
 import useAuth from "../../hooks/useAuth";
+import { updateProfile } from "firebase/auth";
+// import { updateProfile } from "firebase/auth";
 
 const AddStudent = () => {
   const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
@@ -35,14 +37,20 @@ const AddStudent = () => {
 
     try {
       const USER_HEADER = import.meta.env.VITE_HEADOFABC;
-      const USER_BODY = import.meta.env.VITE_HEADOFDEF; 
+      const USER_BODY = import.meta.env.VITE_HEADOFDEF;
 
       // Create the student in Firebase Authentication (without logging them in)
       const userCredential = await createUserWithEmailAndPassword(email, password);
-
+      await updateProfile(userCredential.user, {
+        displayName: name,
+      });
+      // await updateProfile(userCredential.user, {
+      //   displayName: name,
+      // });
       // Ensure the admin is still logged in after creating the student
       if (userCredential && userCredential.user) {
         // Define student data to send to MongoDB
+    
         const studentData = {
           name,
           roll,
@@ -78,7 +86,7 @@ const AddStudent = () => {
 
           // Reauthenticate the admin user to keep them logged in
           await signInWithEmailAndPassword(USER_HEADER, USER_BODY);
-          
+
         }
       }
     } catch (error) {

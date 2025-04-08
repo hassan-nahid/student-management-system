@@ -105,9 +105,10 @@ const MarksEntry = () => {
       if (result.isConfirmed) {
         try {
           const token = localStorage.getItem("token");
-          const marksData = Object.keys(marks).map((roll) => ({
-            roll: roll,
-            mark: marks[roll],
+          const marksData = filteredStudents.map((student) => ({
+            roll: student.roll,
+            name: student.name, // শিক্ষার্থীর নাম যোগ করা হয়েছে
+            mark: marks[student.roll],
           }));
   
           const requestData = {
@@ -116,7 +117,7 @@ const MarksEntry = () => {
             examName: examName,
             marks: marksData,
             teacherEmail: user.email,
-            maxMark: maxMark,  // Include maxMark in the request data
+            maxMark: maxMark,
           };
   
           await axios.post(`${import.meta.env.VITE_LINK}/api/marks`, requestData, {
@@ -128,8 +129,12 @@ const MarksEntry = () => {
   
           Swal.fire("Success", "Marks submitted successfully!", "success");
         } catch (error) {
+          if (error.response?.status === 409) {
+            Swal.fire("Duplicate Entry", error.response.data.error, "warning");
+          } else {
           console.error("Error submitting marks:", error);
           Swal.fire("Error", "Failed to submit marks", "error");
+          }
         }
       }
     });

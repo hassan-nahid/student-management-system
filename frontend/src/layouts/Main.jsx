@@ -10,6 +10,7 @@ import { IoIosPeople } from "react-icons/io";
 import { TfiWrite } from "react-icons/tfi";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import { TbBookmarksFilled } from "react-icons/tb";
+import { TiMessageTyping } from "react-icons/ti";
 
 
 
@@ -68,6 +69,7 @@ const Main = () => {
                                 <li><Link to={"/attendance_overview"}>Attendance Overview<FaPeopleRoof/> </Link></li>
                                 <li><Link to={"/marks_overview"}>Marks Overview<TbBookmarksFilled/> </Link></li>
                                 <li><Link to={"/teacher_notice"}>Teacher Notice<TfiWrite/> </Link></li>
+                                <li><Link to={"/teacher_message"}>Teacher Message<TiMessageTyping/> </Link></li>
                             </>)}
                             {role === import.meta.env.VITE_STUDENT && (<>
                                 student

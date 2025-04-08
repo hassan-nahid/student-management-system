@@ -9,6 +9,7 @@ const MarksSchema = new mongoose.Schema(
     examName: {
       type: String,
       required: true,
+      unique: true,
     },
     subject: {
       type: String,
@@ -17,6 +18,7 @@ const MarksSchema = new mongoose.Schema(
     marks: [
       {
         roll: { type: Number, required: true },
+        name: { type: String, required: true },
         mark: { type: Number, required: true },
       },
     ],

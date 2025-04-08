@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import { useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import auth from "../../firebase/firebase.config";
 import useAuth from "../../hooks/useAuth";
+import { updateProfile } from "firebase/auth";
 
 const AddTeacher = () => {
 
@@ -32,6 +33,9 @@ const AddTeacher = () => {
 
       if (userCredential) {
         // Define teacher data to send to the backend
+        await updateProfile(userCredential.user, {
+          displayName: name,
+        });
         const teacherData = {
           name,
           email,
