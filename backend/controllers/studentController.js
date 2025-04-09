@@ -63,3 +63,18 @@ export const getStudentByClass = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 }
+export const getStudentByEmail = async (req, res) => {
+  try {
+      const { email } = req.params;
+      const student = await Student.findOne({ email });
+      
+      if (!student) {
+          return res.status(404).json({ message: "Student not found" });
+      }
+      
+      res.status(200).json(student);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+  }
+};

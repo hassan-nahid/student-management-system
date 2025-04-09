@@ -1,4 +1,4 @@
-import { createStudent, deleteStudent, getAllStudents, getStudentByClass, getStudentById, updateStudent } from "../controllers/studentController.js";
+import { createStudent, deleteStudent, getAllStudents, getStudentByClass, getStudentByEmail, getStudentById, updateStudent } from "../controllers/studentController.js";
 import express from 'express';
 import { verifyAdmin } from "../middleware/AdminVerify.js";
 import { verifyTeacher } from "../middleware/TeacherVerify.js";
@@ -22,5 +22,7 @@ router.delete('/:id', verifyAdmin, deleteStudent);
 
 // Route to get students by class
 router.get('/class/:class', verifyTeacher, getStudentByClass);
+router.get('/email/:email', getStudentByEmail);
+
 
 export default router;

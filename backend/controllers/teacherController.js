@@ -53,3 +53,18 @@ export const deleteTeacher = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+// Get teacher by email
+export const getTeacherByEmail = async (req, res) => {
+  try {
+      const { email } = req.params;
+      const teacher = await Teacher.findOne({ email });
+
+      if (!teacher) {
+          return res.status(404).json({ message: 'Teacher not found' });
+      }
+
+      res.status(200).json(teacher);
+  } catch (error) {
+      res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
