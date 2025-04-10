@@ -25,7 +25,6 @@ import MarksEntry from "../pages/Teacher/MarksEntry";
 import AddSubject from "../pages/Admin/AddSubject";
 import AttendanceOverview from "../pages/Teacher/AttendanceOverview";
 import MarksOverview from "../pages/Teacher/MarksOverview";
-import TeacherNotice from "../pages/Teacher/teacherNotice";
 import TeacherMessage from "../pages/Teacher/TeacherMessage";
 import StudentPrivateRoute from "./StudentPrivateRoute";
 import StudentAttendance from "../pages/Student/StudentAttendance";
@@ -33,6 +32,7 @@ import Result from "../pages/Student/Result";
 import Message from "../pages/Student/Message";
 import StudentNotice from "../pages/Student/StudentNotice";
 import AdminMessage from "../pages/Admin/AdminMessage";
+import TeacherNotice from "../pages/Teacher/TeacherNotice";
 
 
 
