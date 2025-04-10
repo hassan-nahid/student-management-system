@@ -91,6 +91,7 @@ const StudentDetails = () => {
                             <p className="text-gray-600">Name: {guardianDetails.name}</p>
                             <p className="text-gray-600">Relation: {guardianDetails.relation}</p>
                             <p className="text-gray-600">Phone: {guardianDetails.phone}</p>
+                            <p className="text-gray-600">Phone: {guardianDetails.email &&  guardianDetails.email}</p>
                         </div>
                     </div>
                 </div>

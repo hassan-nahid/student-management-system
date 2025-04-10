@@ -142,6 +142,10 @@ const Home = () => {
                 <p className="font-semibold">Guardian Phone:</p>
                 <p>{guardianDetails.phone}</p>
               </div>
+              <div>
+                <p className="font-semibold">Guardian Phone:</p>
+                <p>{guardianDetails.email && guardianDetails.email}</p>
+              </div>
             </>
           )}
         </div>
