@@ -1,4 +1,3 @@
-// models/Message.js
 import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema({
@@ -6,8 +5,12 @@ const messageSchema = new mongoose.Schema({
     email: { type: String, required: true },
     name: { type: String, required: true },
   },
-  recipientType: { type: String, enum: ["admin", "class"], required: true },
-  className: { type: String }, // Only if recipientType is 'class'
+  recipientType: { type: String, enum: ["admin","class", "teacher"], required: true },
+
+  // Optional fields based on recipientType
+  className: { type: String },         // Only used when recipientType is 'class'
+  teacherEmail: { type: String },      // Only used when recipientType is 'teacher'
+
   message: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
 });

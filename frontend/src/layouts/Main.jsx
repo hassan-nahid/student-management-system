@@ -14,10 +14,6 @@ import { TiMessageTyping } from "react-icons/ti";
 
 
 
-
-
-
-
 const Main = () => {
     const [user] = useAuthState(auth);
     const [signOut,] = useSignOut(auth);
@@ -61,18 +57,25 @@ const Main = () => {
                                 </Link></li>
                                 <li><Link to={"/admin_notice"}>Notices<TfiWrite />
                                 </Link></li>
+                                <li><Link to={"/admin_message"}>Message<TiMessageTyping />
+
+                                </Link></li>
                             </>)}
                             {role === import.meta.env.VITE_TEACHER && (<>
-                                <li><Link to={"/attendance"}>Attendance<TfiWrite />
+                                <li><Link to={"/attendance_entry"}>Attendance<TfiWrite />
                                 </Link></li>
-                                <li><Link to={"/marks_entry"}>Marks Entry<IoCheckmarkDoneSharp/> </Link></li>
-                                <li><Link to={"/attendance_overview"}>Attendance Overview<FaPeopleRoof/> </Link></li>
-                                <li><Link to={"/marks_overview"}>Marks Overview<TbBookmarksFilled/> </Link></li>
-                                <li><Link to={"/teacher_notice"}>Teacher Notice<TfiWrite/> </Link></li>
-                                <li><Link to={"/teacher_message"}>Teacher Message<TiMessageTyping/> </Link></li>
+                                <li><Link to={"/marks_entry"}>Marks Entry<IoCheckmarkDoneSharp /> </Link></li>
+                                <li><Link to={"/attendance_overview"}>Attendance Overview<FaPeopleRoof /> </Link></li>
+                                <li><Link to={"/marks_overview"}>Marks Overview<TbBookmarksFilled /> </Link></li>
+                                <li><Link to={"/teacher_notice"}>Teacher Notice<TfiWrite /> </Link></li>
+                                <li><Link to={"/teacher_message"}>Teacher Message<TiMessageTyping /> </Link></li>
                             </>)}
                             {role === import.meta.env.VITE_STUDENT && (<>
-                                student
+                                <li><Link to={"/attendance"}>Attendance<FaPeopleRoof /> </Link></li>
+                                <li><Link to={"/result"}>Result<TbBookmarksFilled /> </Link></li>
+                                <li><Link to={"/message"}>Message<TiMessageTyping /> </Link></li>
+                                <li><Link to={"/notice"}>Notice<TfiWrite /> </Link></li>
+
                             </>)}
 
                         </div>

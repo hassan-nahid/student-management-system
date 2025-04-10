@@ -50,3 +50,33 @@ export const getMarksByTeacher = async (req, res) => {
     res.status(500).json({ message: "Error fetching marks", error });
   }
 };
+
+export const getResultByRoll = async (req, res) => {
+  const roll = Number(req.params.roll); // ✅ make sure it's a number
+
+  try {
+    const allMarks = await Marks.find({ "marks.roll": roll });
+
+    const filteredResults = allMarks
+      .map((entry) => {
+        const studentMark = entry.marks.find((m) => m.roll === roll);
+        if (!studentMark) return null;
+
+        return {
+          class: entry.class,
+          subject: entry.subject,
+          examName: entry.examName,
+          maxMark: entry.maxMark,
+          marks: [studentMark],
+        };
+      })
+      .filter(Boolean);
+
+    res.status(200).json(filteredResults);
+  } catch (error) {
+    console.error("Error fetching result by roll:", error);
+    res.status(500).json({ message: "Failed to fetch result" });
+  }
+};
+;
+

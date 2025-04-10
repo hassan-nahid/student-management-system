@@ -10,7 +10,6 @@ export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const role = localStorage.getItem("role")
 
-    console.log(data)
 
     useEffect(() => {
         const fetchData = async () => {

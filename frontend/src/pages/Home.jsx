@@ -148,6 +148,13 @@ const Home = () => {
       </div>
     );
   }
+  if (role === import.meta.env.VITE_ADMIN) {
+    return(
+      <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg space-y-4">
+        <h2 className="text-blue-500 text-2xl">Welcome Admin</h2>
+      </div>
+    )
+  }
 
   return (
     <div className="text-center mt-10 text-gray-500 text-lg">

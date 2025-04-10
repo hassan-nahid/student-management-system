@@ -27,6 +27,12 @@ import AttendanceOverview from "../pages/Teacher/AttendanceOverview";
 import MarksOverview from "../pages/Teacher/MarksOverview";
 import TeacherNotice from "../pages/Teacher/teacherNotice";
 import TeacherMessage from "../pages/Teacher/TeacherMessage";
+import StudentPrivateRoute from "./StudentPrivateRoute";
+import StudentAttendance from "../pages/Student/StudentAttendance";
+import Result from "../pages/Student/Result";
+import Message from "../pages/Student/Message";
+import StudentNotice from "../pages/Student/StudentNotice";
+import AdminMessage from "../pages/Admin/AdminMessage";
 
 
 
@@ -98,11 +104,15 @@ export const router = createBrowserRouter([
         path: "/schedule/:id",
         element: <AdminPrivateRoute><EditSchedule /></AdminPrivateRoute>,
       },
+      {
+        path: "/admin_message",
+        element: <AdminPrivateRoute><AdminMessage /></AdminPrivateRoute>,
+      },
 
 
       // Teacher routes
       {
-        path: "/attendance",
+        path: "/attendance_entry",
         element: <TeacherPrivateRoute><Attendance /></TeacherPrivateRoute>,
       },
       {
@@ -125,6 +135,24 @@ export const router = createBrowserRouter([
         path: "/teacher_message",
         element: <TeacherPrivateRoute><TeacherMessage /></TeacherPrivateRoute>,
       },
+      // Student routes
+      {
+        path: "/attendance",
+        element: <StudentPrivateRoute><StudentAttendance /></StudentPrivateRoute>,
+      },
+      {
+        path: "/result",
+        element: <StudentPrivateRoute><Result /></StudentPrivateRoute>,
+      },
+      {
+        path: "/message",
+        element: <StudentPrivateRoute><Message /></StudentPrivateRoute>,
+      },
+      {
+        path: "/notice",
+        element: <StudentPrivateRoute><StudentNotice /></StudentPrivateRoute>,
+      },
+
 
     ]
   },

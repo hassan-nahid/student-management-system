@@ -3,42 +3,58 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 
-const TeacherMessage = () => {
-    const [recipientType, setRecipientType] = useState("admin");
+const AdminMessage = () => {
+    const [recipientType, setRecipientType] = useState("class");
     const [className, setClassName] = useState("");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
-    const [view, setView] = useState("send"); // "send" or "see"
-    const [teacherMessages, setTeacherMessages] = useState([]);
+    const [view, setView] = useState("send");
+
+    const [teachers, setTeachers] = useState([]);
+    const [selectedTeacher, setSelectedTeacher] = useState("");
+    const [adminMessages, setAdminMessages] = useState([]);
 
     const { user } = useAuth();
-    console.log(teacherMessages)
+    const role = localStorage.getItem("role");
 
     useEffect(() => {
-        const fetchMessages = async () => {
-            if (user?.email) {
-                try {
-                    const res = await axios.get(
-                        `${import.meta.env.VITE_LINK}/api/message/teacher/${user.email}`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                            },
-                        }
-                    );
-                    setTeacherMessages(res.data || []);
-                } catch (err) {
-
-                    console.log(err.message);
-                    toast.error("Failed to fetch teacher messages");
-                }
+        const fetchTeachers = async () => {
+            try {
+                const res = await axios.get(`${import.meta.env.VITE_LINK}/api/teachers`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                setTeachers(res.data || []);
+            } catch (err) {
+                console.log(err.message)
+                toast.error("Failed to fetch teachers");
             }
         };
 
-        if (view === "see") {
+        fetchTeachers();
+    }, []);
+
+    useEffect(() => {
+        if (view === "see" && role === import.meta.env.VITE_ADMIN) {
+            const fetchMessages = async () => {
+                try {
+                    const res = await axios.get(`${import.meta.env.VITE_LINK}/api/message/admin`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+                    setAdminMessages(res.data || []);
+                } catch (err) {
+                    console.log(err.message)
+
+                    toast.error("Failed to fetch messages");
+                }
+            };
+
             fetchMessages();
         }
-    }, [view, user]);
+    }, [view, role]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -46,12 +62,13 @@ const TeacherMessage = () => {
 
         try {
             await axios.post(
-                `${import.meta.env.VITE_LINK}/api/message`,
+                `${import.meta.env.VITE_LINK}/api/message/admin`,
                 {
                     senderEmail: user?.email,
-                    senderName: user?.displayName || "Anonymous",
+                    senderName: "Admin",
                     recipientType,
                     className: recipientType === "class" ? className : "",
+                    teacherEmail: recipientType === "teacher" ? selectedTeacher : "",
                     message,
                 },
                 {
@@ -65,6 +82,7 @@ const TeacherMessage = () => {
             toast.success("Message sent!");
             setMessage("");
             setClassName("");
+            setSelectedTeacher("");
         } catch (error) {
             toast.error(error.message);
         } finally {
@@ -100,8 +118,8 @@ const TeacherMessage = () => {
                             value={recipientType}
                             onChange={(e) => setRecipientType(e.target.value)}
                         >
-                            <option value="admin">Admin</option>
                             <option value="class">Specific Class</option>
+                            <option value="teacher">Specific Teacher</option>
                         </select>
                     </div>
 
@@ -118,6 +136,25 @@ const TeacherMessage = () => {
                                 {[...Array(10)].map((_, i) => (
                                     <option key={i + 1} value={i + 1}>
                                         {i + 1}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+
+                    {recipientType === "teacher" && (
+                        <div>
+                            <label className="label font-medium">Select Teacher</label>
+                            <select
+                                className="select select-bordered w-full"
+                                value={selectedTeacher}
+                                onChange={(e) => setSelectedTeacher(e.target.value)}
+                                required
+                            >
+                                <option value="">Select a teacher</option>
+                                {teachers.map((teacher) => (
+                                    <option key={teacher._id} value={teacher.email}>
+                                        {teacher.name} ({teacher.email})
                                     </option>
                                 ))}
                             </select>
@@ -142,25 +179,33 @@ const TeacherMessage = () => {
             )}
 
             {/* View: See Message */}
-            {view === "see" && teacherMessages.length > 0 && (
-                <div className="space-y-4">
-                    {teacherMessages.map((msg) => (
-                        <div key={msg._id} className="p-4 border-b">
-                            <p className="font-medium">{msg.sender.name} ({msg.sender.email})</p>
-                            <p className="text-gray-500">{new Date(msg.timestamp).toLocaleString()}</p>
-                            <p className="mt-2">{msg.message}</p>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {view === "see" && teacherMessages.length === 0 && (
-                <div className="text-center text-gray-500">
-                    <p className="text-lg font-semibold">No messages found</p>
+            {view === "see" && role === import.meta.env.VITE_ADMIN && (
+                <div>
+                    <h2 className="text-lg font-semibold mb-4 text-center">Messages for Admin</h2>
+                    {adminMessages.length === 0 ? (
+                        <p className="text-center text-gray-500">No messages found.</p>
+                    ) : (
+                        <ul className="space-y-4">
+                            {adminMessages.map((msg) => (
+                                <li
+                                    key={msg._id}
+                                    className="border border-gray-200 rounded-lg p-4 shadow-sm"
+                                >
+                                    <p className="text-sm text-gray-600">
+                                        From: <strong>{msg.sender.name}</strong> ({msg.sender.email})
+                                    </p>
+                                    <p className="text-gray-800 mt-2">{msg.message}</p>
+                                    <p className="text-xs text-gray-400 mt-2">
+                                        {new Date(msg.timestamp).toLocaleString()}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
             )}
         </div>
     );
 };
 
-export default TeacherMessage;
+export default AdminMessage;

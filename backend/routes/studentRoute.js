@@ -2,6 +2,7 @@ import { createStudent, deleteStudent, getAllStudents, getStudentByClass, getStu
 import express from 'express';
 import { verifyAdmin } from "../middleware/AdminVerify.js";
 import { verifyTeacher } from "../middleware/TeacherVerify.js";
+import { verifyStudent } from "../middleware/StudentVerify.js";
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.delete('/:id', verifyAdmin, deleteStudent);
 
 // Route to get students by class
 router.get('/class/:class', verifyTeacher, getStudentByClass);
-router.get('/email/:email', getStudentByEmail);
+router.get('/email/:email', verifyStudent ,getStudentByEmail);
 
 
 export default router;

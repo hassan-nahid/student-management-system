@@ -94,3 +94,19 @@ export const getAttendanceByClass = async (req, res) => {
     });
   }
 };
+
+export const getStudentAttendance = async (req, res) => {
+  const roll = req.params.roll;
+
+  try {
+    const allAttendance = await Attendance.find();
+
+    res.status(200).json({
+      data: allAttendance.filter((record) =>
+        record.attendance.some((entry) => entry.roll === roll)
+      ),
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};

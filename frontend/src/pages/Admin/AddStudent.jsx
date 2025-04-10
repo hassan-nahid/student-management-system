@@ -33,6 +33,7 @@ const AddStudent = () => {
       name: form.guardianName.value,
       relation: form.guardianRelation.value,
       phone: form.guardianPhone.value,
+      email: form.guardianEmail.value,
     };
 
     try {
@@ -219,6 +220,12 @@ const AddStudent = () => {
               <span className="label-text">Guardian&apos;s Phone</span>
             </label>
             <input type="text" name="guardianPhone" placeholder="Enter guardian's phone" className="input input-bordered w-full" required />
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Guardian&apos;s Email</span>
+            </label>
+            <input type="email" name="guardianEmail" placeholder="Enter guardian's email" className="input input-bordered w-full" required />
           </div>
 
           <div className="form-control">
