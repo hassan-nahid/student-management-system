@@ -6,8 +6,11 @@ import {
   updateSchedule,
   deleteSchedule,
   getSchedulesById,
+  getTeacherSchedules,
 } from "../controllers/scheduleController.js";
 import { verifyAdmin } from "../middleware/AdminVerify.js";
+import { verifyTeacher } from "../middleware/TeacherVerify.js";
+import { verifyStudent } from "../middleware/StudentVerify.js";
 
 const router = express.Router();
 
@@ -15,7 +18,7 @@ const router = express.Router();
 router.get("/", verifyAdmin, getSchedules);
 
 // GET schedules by class
-router.get("/:classNumber", getSchedulesByClass);
+router.get("/:classNumber" ,getSchedulesByClass);
 
 // GET schedules by ID
 router.get("/single/:id", verifyAdmin, getSchedulesById);
@@ -28,5 +31,8 @@ router.put("/:id", verifyAdmin, updateSchedule);
 
 // DELETE a schedule by ID
 router.delete("/:id", verifyAdmin, deleteSchedule);
+
+router.get("/teacher/:email", verifyTeacher ,getTeacherSchedules);
+
 
 export default router;

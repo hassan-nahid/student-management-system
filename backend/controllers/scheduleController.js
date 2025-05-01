@@ -40,10 +40,10 @@ export const getSchedulesByClass = async (req, res) => {
 // Add a new schedule
 
 export const addSchedule = async (req, res) => {
-    const { classNumber, day, period, subject, teacher, time } = req.body;
+    const { classNumber, day, period, subject, teacher, teacherEmail, time } = req.body;
 
     // Validate required fields
-    if (!classNumber || !day || !period || !subject || !teacher || !time) {
+    if (!classNumber || !day || !period || !subject || !teacher  || !time) {
         return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -57,6 +57,7 @@ export const addSchedule = async (req, res) => {
                     period,
                     subject,
                     teacher,
+                    teacherEmail,
                     time
                 }
             ]
@@ -83,7 +84,7 @@ export const addSchedule = async (req, res) => {
 // Update a schedule
 export const updateSchedule = async (req, res) => {
     const { id } = req.params;
-    const { classNumber, day, period, subject, teacher, time } = req.body;
+    const { classNumber, day, period, subject, teacher, teacherEmail,  time } = req.body;
 
     // Validate required fields
     if (!classNumber || !day || !period || !subject || !teacher || !time) {
@@ -107,6 +108,7 @@ export const updateSchedule = async (req, res) => {
                 period,
                 subject,
                 teacher,
+                teacherEmail,
                 time,
             },
         ];
@@ -146,3 +148,22 @@ export const deleteSchedule = async (req, res) => {
         res.status(500).json({ message: "Failed to delete schedule", error: error.message });
     }
 };
+
+export const getTeacherSchedules = async (req, res) => {
+    try {
+      const { email: teacherEmail } = req.params;
+  
+      if (!teacherEmail) {
+        return res.status(400).json({ message: "Teacher email is required" });
+      }
+  
+      const schedules = await Schedule.find({
+        "periods.teacher.email": teacherEmail,
+      });
+  
+      return res.status(200).json(schedules);
+    } catch (error) {
+      console.error("Error fetching teacher schedules:", error.message);
+      return res.status(500).json({ message: "Server error while fetching schedules" });
+    }
+  };

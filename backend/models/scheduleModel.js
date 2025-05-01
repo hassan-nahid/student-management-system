@@ -21,8 +21,14 @@ const scheduleSchema = new mongoose.Schema({
         required: true,
       },
       teacher: {
-        type: String, // Alternatively, you could store teacher IDs
-        required: true,
+        name: {
+          type: String,
+          required: true,
+        },
+        email: {
+          type: String,
+          required: true,
+        },
       },
       time: {
         type: String, // e.g., "8:00 AM - 9:00 AM"
