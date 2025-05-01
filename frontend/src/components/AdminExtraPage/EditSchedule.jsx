@@ -8,14 +8,14 @@ const EditSchedule = () => {
   const [scheduleData, setScheduleData] = useState(null);
   const [teachers, setTeachers] = useState([]);
   const navigate = useNavigate();
-  const { id } = useParams(); // Get the schedule ID from the URL parameters
+  const { id } = useParams();
   const { user } = useAuth();
 
+  const currentPeriod = scheduleData?.periods[0];
 
   useEffect(() => {
     const fetchScheduleData = async () => {
       try {
-        // const email = encodeURIComponent(user.email);
         const response = await fetch(
           `${import.meta.env.VITE_LINK}/api/schedule/single/${id}`,
           {
@@ -63,22 +63,28 @@ const EditSchedule = () => {
 
     fetchScheduleData();
     fetchTeachers();
-  }, [id]);
+  }, [id, user.email]);
 
   const handleEditSchedule = async (e) => {
     e.preventDefault();
     const form = e.target;
+    const selectedTeacherName = form.teacher.value;
+    const selectedTeacherObj = teachers.find((t) => t.name === selectedTeacherName);
+
     const updatedScheduleData = {
       classNumber: form.classNumber.value,
       day: form.day.value,
       period: form.period.value,
       subject: form.subject.value,
-      teacher: form.teacher.value,
+      teacher: {
+        name: selectedTeacherObj?.name || selectedTeacherName,
+        email: selectedTeacherObj?.email || currentPeriod?.teacher?.email || "",
+      },
       time: form.time.value,
     };
 
     try {
-      const email = encodeURIComponent(user.email); 
+      const email = encodeURIComponent(user.email);
       const response = await fetch(
         `${import.meta.env.VITE_LINK}/api/schedule/${id}?email=${email}`,
         {
@@ -93,7 +99,7 @@ const EditSchedule = () => {
 
       if (response.ok) {
         toast.success("Schedule updated successfully.");
-        navigate("/schedule"); // Redirect to schedules list
+        navigate("/schedule");
       } else {
         toast.error("Failed to update schedule.");
       }
@@ -104,7 +110,7 @@ const EditSchedule = () => {
   };
 
   if (!scheduleData) {
-    return <Loading />; // Show a loading state while fetching data
+    return <Loading />;
   }
 
   return (
@@ -113,6 +119,7 @@ const EditSchedule = () => {
         <h2 className="text-2xl font-semibold text-center text-gray-800">Edit Schedule</h2>
 
         <form onSubmit={handleEditSchedule} className="space-y-4">
+          {/* Class Number */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Class Number</span>
@@ -132,6 +139,7 @@ const EditSchedule = () => {
             </select>
           </div>
 
+          {/* Day */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Day</span>
@@ -143,14 +151,17 @@ const EditSchedule = () => {
               required
             >
               <option value="">Select Day</option>
-              {["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].map((day) => (
-                <option key={day} value={day}>
-                  {day}
-                </option>
-              ))}
+              {["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].map(
+                (day) => (
+                  <option key={day} value={day}>
+                    {day}
+                  </option>
+                )
+              )}
             </select>
           </div>
 
+          {/* Period */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Period</span>
@@ -158,12 +169,13 @@ const EditSchedule = () => {
             <input
               type="text"
               name="period"
-              defaultValue={scheduleData.periods[0]?.period}
+              defaultValue={currentPeriod?.period}
               className="input input-bordered w-full"
               required
             />
           </div>
 
+          {/* Subject */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Subject</span>
@@ -171,30 +183,28 @@ const EditSchedule = () => {
             <input
               type="text"
               name="subject"
-              defaultValue={scheduleData.periods[0]?.subject}
+              defaultValue={currentPeriod?.subject}
               className="input input-bordered w-full"
               required
             />
           </div>
 
+          {/* Teacher */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Teacher</span>
             </label>
             <select
               name="teacher"
-              defaultValue={scheduleData.periods[0]?.teacher} // Default value from scheduleData
+              defaultValue={currentPeriod?.teacher?.name}
               className="select select-bordered w-full"
               required
             >
-              {/* Default value option */}
-              <option value={scheduleData.periods[0]?.teacher}>
-                {scheduleData.periods[0]?.teacher}
+              <option value={currentPeriod?.teacher?.name}>
+                {currentPeriod?.teacher?.name}
               </option>
-
-              {/* Dynamic options from teachers */}
               {teachers
-                .filter((teacher) => teacher.name !== scheduleData.periods[0]?.teacher) // Exclude default value to avoid duplication
+                .filter((teacher) => teacher.name !== currentPeriod?.teacher?.name)
                 .map((teacher) => (
                   <option key={teacher._id} value={teacher.name}>
                     {teacher.name}
@@ -203,7 +213,7 @@ const EditSchedule = () => {
             </select>
           </div>
 
-
+          {/* Time */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Time</span>
@@ -211,7 +221,7 @@ const EditSchedule = () => {
             <input
               type="text"
               name="time"
-              defaultValue={scheduleData.periods[0]?.time}
+              defaultValue={currentPeriod?.time}
               className="input input-bordered w-full"
               required
             />

@@ -13,13 +13,7 @@ const Home = () => {
   }
 
   // Check if the user data is not available or role doesn't match the correct role
-  if (!userData) {
-    return (
-      <div className="text-center mt-10 text-gray-500 text-lg">
-        User data not available.
-      </div>
-    );
-  }
+  
 
   if (role === import.meta.env.VITE_TEACHER) {
     const { name, email, phone, role: userRole, address } = userData;
@@ -158,6 +152,14 @@ const Home = () => {
         <h2 className="text-blue-500 text-2xl">Welcome Admin</h2>
       </div>
     )
+  }
+
+  if (!userData) {
+    return (
+      <div className="text-center mt-10 text-gray-500 text-lg">
+        User data not available.
+      </div>
+    );
   }
 
   return (

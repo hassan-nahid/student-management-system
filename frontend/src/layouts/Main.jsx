@@ -67,12 +67,14 @@ const Main = () => {
                                 <li><Link to={"/marks_entry"}>Marks Entry<IoCheckmarkDoneSharp /> </Link></li>
                                 <li><Link to={"/attendance_overview"}>Attendance Overview<FaPeopleRoof /> </Link></li>
                                 <li><Link to={"/marks_overview"}>Marks Overview<TbBookmarksFilled /> </Link></li>
+                                <li><Link to={"/teacher_schedule"}>Schedule<FaBook /></Link></li>
                                 <li><Link to={"/teacher_notice"}>Teacher Notice<TfiWrite /> </Link></li>
                                 <li><Link to={"/teacher_message"}>Teacher Message<TiMessageTyping /> </Link></li>
                             </>)}
                             {role === import.meta.env.VITE_STUDENT && (<>
                                 <li><Link to={"/attendance"}>Attendance<FaPeopleRoof /> </Link></li>
                                 <li><Link to={"/result"}>Result<TbBookmarksFilled /> </Link></li>
+                                <li><Link to={"/student_schedule"}>Schedule<FaBook /></Link></li>
                                 <li><Link to={"/message"}>Message<TiMessageTyping /> </Link></li>
                                 <li><Link to={"/notice"}>Notice<TfiWrite /> </Link></li>
 

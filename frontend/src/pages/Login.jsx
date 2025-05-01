@@ -7,18 +7,29 @@ import Swal from 'sweetalert2';
 const Login = () => {
     const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
     const [user] = useAuthState(auth);
-    const [role, setRole] = useState("Student"); // Default role set to "Admin"
+    const [role, setRole] = useState("Student"); // Default role
+    const [email, setEmail] = useState("");      // New State for email
+    const [password, setPassword] = useState(""); // New State for password
     const navigate = useNavigate();
+
+    // Auto-fill email & password when role changes
+    useEffect(() => {
+        if (role === "Admin") {
+            setEmail("admin@sms.com");
+            setPassword("password");
+        } else if (role === "Teacher") {
+            setEmail("ironman@nexschola.com");
+            setPassword("password");
+        } else if (role === "Student") {
+            setEmail("s110001@nexschola.com");
+            setPassword("110001");
+        }
+    }, [role]);
 
     const handleLogin = (e) => {
         e.preventDefault();
-        const form = e.target;
-        const email = form.email.value;
-        const password = form.password.value;
 
         let roleUrl = '';
-
-        // Determine the role and set the corresponding URL for verification
         if (role === "Admin") {
             roleUrl = `${import.meta.env.VITE_LINK}/api/auth/admin`;
         } else if (role === "Student") {
@@ -27,20 +38,16 @@ const Login = () => {
             roleUrl = `${import.meta.env.VITE_LINK}/api/auth/teacher`;
         }
 
-        // First check if the role is valid by fetching from the backend
         fetch(roleUrl, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email }),
         })
             .then((res) => res.json())
             .then((data) => {
                 if (data.token) {
-                    // If the role is verified, proceed with the login
-                    localStorage.setItem("token",data.token)
-                    localStorage.setItem("role",data.role)
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("role", data.role);
                     signInWithEmailAndPassword(email, password)
                         .then(() => {
                             Swal.fire({
@@ -61,7 +68,7 @@ const Login = () => {
                                 showConfirmButton: false,
                                 timer: 1500,
                             });
-                            console.log(error.message)
+                            console.log(error.message);
                         });
                 } else {
                     Swal.fire({
@@ -81,29 +88,25 @@ const Login = () => {
                     showConfirmButton: false,
                     timer: 1500,
                 });
-                console.log(error.message)
+                console.log(error.message);
             });
     };
 
-
     useEffect(() => {
-
         if (user) {
-            if (role === "Admin") {
-                navigate("/");
-            } else if (role === "Teacher") {
-                navigate("/");
-            } else if (role === "Student") {
-                navigate("/");
-            }
+            navigate("/");
         }
-
-    }, [user, role, navigate]);
+    }, [user, navigate]);
 
     return (
         <div>
             <div className="hero bg-base-200 min-h-screen">
                 <div className="hero-content flex-col w-full">
+                <div className="text-center my-5">
+                    <p className="text-gray-600 mt-2">
+                        Just select your Role ➔ Then click Login ✅
+                    </p>
+                </div>
                     <div className="text-center">
                         <h1 className="text-5xl font-bold text-primary">Login</h1>
                     </div>
@@ -128,13 +131,29 @@ const Login = () => {
                                 <label className="label">
                                     <span className="label-text">Email</span>
                                 </label>
-                                <input type="email" name="email" placeholder="email" className="input input-bordered" required />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="email"
+                                    className="input input-bordered"
+                                    required
+                                />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Password</span>
                                 </label>
-                                <input type="password" name="password" placeholder="password" className="input input-bordered" required />
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="password"
+                                    className="input input-bordered"
+                                    required
+                                />
                             </div>
                             <div className="form-control mt-6">
                                 <button className="btn text-white btn-primary">Login</button>

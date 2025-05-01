@@ -18,7 +18,6 @@ export const UserProvider = ({ children }) => {
 
                 try {
                     const encodedEmail = encodeURIComponent(user.email);
-                    console.log(encodedEmail)
                     let res;
 
                     if (role === import.meta.env.VITE_TEACHER) {

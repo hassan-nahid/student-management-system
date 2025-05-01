@@ -33,6 +33,8 @@ import Message from "../pages/Student/Message";
 import StudentNotice from "../pages/Student/StudentNotice";
 import AdminMessage from "../pages/Admin/AdminMessage";
 import TeacherNotice from "../pages/Teacher/TeacherNotice";
+import TeacherSchedule from "../pages/Teacher/TeacherSchedule";
+import StudentSchedule from "../pages/Student/StudentSchedule";
 
 
 
@@ -128,6 +130,10 @@ export const router = createBrowserRouter([
         element: <TeacherPrivateRoute><MarksOverview /></TeacherPrivateRoute>,
       },
       {
+        path: "/teacher_schedule",
+        element: <TeacherPrivateRoute><TeacherSchedule /></TeacherPrivateRoute>,
+      },
+      {
         path: "/teacher_notice",
         element: <TeacherPrivateRoute><TeacherNotice /></TeacherPrivateRoute>,
       },
@@ -143,6 +149,10 @@ export const router = createBrowserRouter([
       {
         path: "/result",
         element: <StudentPrivateRoute><Result /></StudentPrivateRoute>,
+      },
+      {
+        path: "/student_schedule",
+        element: <StudentPrivateRoute><StudentSchedule /></StudentPrivateRoute>,
       },
       {
         path: "/message",

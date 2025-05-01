@@ -116,7 +116,7 @@ const ScheduleShow = () => {
                                                         <th>{index + 1}</th>
                                                         <td>{periodItem.period}</td>
                                                         <td>{periodItem.subject}</td>
-                                                        <td>{periodItem.teacher}</td>
+                                                        <td>{periodItem.teacher.name}</td>
                                                         <td>{periodItem.time}</td>
                                                         <td className="flex gap-1 flex-wrap">
                                                             <button
